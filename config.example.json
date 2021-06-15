@@ -1,5 +1,6 @@
 {
   "prefix": "",
   "token": "YOUR DISCORD TOKEN",
-  "animuToken": "YOUR ANIMU TOKEN"
+  "animuToken": "YOUR ANIMU TOKEN",
+  "rapidapikey": "YOUR RAPIDAPI KEY"
 }
