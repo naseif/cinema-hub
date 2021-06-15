@@ -5,6 +5,16 @@ const path = __dirname;
 const client = new Discord.Client();
 let commands = (client.commands = new Discord.Collection());
 
+if (!prefix) {
+  console.log("Please define your own prefix in config.json");
+  return;
+}
+
+if (!token) {
+  console.log("Please add you own discord token in config.json");
+  return;
+}
+
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
   client.user.setActivity(`Use ${prefix}help`);
