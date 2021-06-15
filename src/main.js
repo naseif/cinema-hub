@@ -7,6 +7,7 @@ let commands = (client.commands = new Discord.Collection());
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
+  client.user.setActivity(`Use ${prefix}help`);
 });
 
 const commandFiles = fs
