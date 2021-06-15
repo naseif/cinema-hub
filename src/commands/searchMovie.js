@@ -9,7 +9,7 @@ module.exports = {
   execute(message, args) {
     if (!rapidapikey)
       return message.channel.sen(
-        "Your RapidAPI is not defined in config.json !"
+        "Your RapidAPI key is not defined in config.json!"
       );
     let infoObject = [];
     const searchString = args.join(" ");
