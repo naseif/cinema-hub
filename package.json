@@ -1,0 +1,32 @@
+{
+  "name": "cinema-hub",
+  "version": "1.0.0",
+  "description": " A Discord Bot to retrieve Movies, TV and Animes information from various databases",
+  "main": "main.js",
+  "scripts": {
+    "start": "node ./src/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/naseif/cinema-hub.git"
+  },
+  "keywords": [
+    "Movies",
+    "Bot",
+    "anime",
+    "Bot"
+  ],
+  "author": "naseif",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/naseif/cinema-hub/issues"
+  },
+  "homepage": "https://github.com/naseif/cinema-hub#readme",
+  "dependencies": {
+    "anime-facts": "^4.2.8",
+    "axios": "^0.21.1",
+    "discord.js": "^12.5.3",
+    "jikanjs": "^0.7.0",
+    "node-fetch": "^2.6.1"
+  }
+}
