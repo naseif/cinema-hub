@@ -32,6 +32,11 @@ You can see all available commands by sending `help` to any text-channel the bot
 
 For Example if your prefix is `!` simply send `!help`
 
+## Commands List
+
+![grafik](https://user-images.githubusercontent.com/68638710/122039575-1cd02d80-cdd7-11eb-9f19-5c2077467b2f.png)
+
+
 ## Contributions
 
 Software contributions are welcome. If you are not a dev, testing and reproting bugs can also be very helpful!
