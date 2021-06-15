@@ -11,11 +11,11 @@ module.exports = {
         return message.channel.send(
           "Sorry, there are no available facts at the moment!"
         );
-      const quoteEmbed = new Discord.MessageEmbed()
+      const factEmbed = new Discord.MessageEmbed()
         .setColor("#ffcc00")
         .setTitle("Facts about Anime")
         .setDescription(fact.fact);
-      message.channel.send(quoteEmbed);
+      message.channel.send(factEmbed);
     });
   },
 };
