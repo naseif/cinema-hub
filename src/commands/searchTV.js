@@ -2,11 +2,17 @@ const getIdAndGenInfo = require("../../api/getFind");
 const getPlotAndGenres = require("../../api/get-overview-details");
 const getSeason = require("../../api/get-seasons");
 const Discord = require("discord.js");
+const { rapidapikey } = require("../../config.json");
 
 module.exports = {
   name: "stv",
   description: "searches tv shows from the imdb database ",
   execute(message, args) {
+    if (!rapidapikey)
+      return message.channel.sen(
+        "Your RapidAPI is not defined in config.json !"
+      );
+
     let infoObject = [];
     const searchString = args.join(" ");
     if (!searchString)
