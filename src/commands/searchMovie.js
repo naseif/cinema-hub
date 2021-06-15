@@ -8,7 +8,7 @@ module.exports = {
   description: "searches for movies from the imdb database ",
   execute(message, args) {
     if (!rapidapikey)
-      return message.channel.sen(
+      return message.channel.send(
         "Your RapidAPI key is not defined in config.json!"
       );
     let infoObject = [];
