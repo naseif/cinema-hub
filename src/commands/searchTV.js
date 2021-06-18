@@ -1,46 +1,18 @@
-const getIdAndGenInfo = require("../../api/getFind");
-const getPlotAndGenres = require("../../api/get-overview-details");
-const getSeason = require("../../api/get-seasons");
-const Discord = require("discord.js");
-const { rapidapikey } = require("../../config.json");
+const { TMDb } = require("../../config.json");
 
 module.exports = {
   name: "stv",
   description: "searches tv shows from the imdb database ",
-  execute(message, args) {
-    if (!rapidapikey)
+  execute(message, args, client, Discord) {
+    if (!TMDb)
       return message.channel.send(
-        "Your RapidAPI key is not defined in config.json!"
+        "Your TMDb key is not defined in config.json!"
       );
 
     let infoObject = [];
     const searchString = args.join(" ");
     if (!searchString)
       return message.channel.send("You have to provide a Show name!");
-
-    const fullInfo = getIdAndGenInfo
-      .getFind(searchString)
-      .then((info) => {
-        infoObject.push(info);
-        const id = info.id.slice(7, -1);
-        return getPlotAndGenres.getGenresAndPlot(id);
-      })
-      .then((data) => {
-        infoObject.push({
-          plot: data.plot,
-          genres: data.genres,
-          rating: data.rating,
-        });
-        const id = infoObject[0].id.slice(7, -1);
-        return getSeason.getSeasons(id);
-      })
-      .then((seasons) => {
-        infoObject.push({ seasons: seasons.length });
-        return infoObject;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
 
     fullInfo.then((data) => {
       const user = message.mentions.users.first() || message.author;

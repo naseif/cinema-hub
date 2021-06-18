@@ -36,7 +36,7 @@ client.on("message", async (message) => {
   const command = args.shift().toLowerCase();
   if (!client.commands.has(command)) return;
   try {
-    client.commands.get(command).execute(message, args);
+    client.commands.get(command).execute(message, args, client, Discord);
   } catch (err) {
     console.error(err);
     message.reply("Command Unknown!");
