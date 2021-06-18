@@ -17,12 +17,12 @@ module.exports = {
           .setTitle("Commands Options")
           .setTitle("A list of all Commands")
           .setDescription(help)
-      )
-      .setTimestamp()
-      .setFooter(
+          .setTimestamp()
+          .setFooter(
         "Created by naseif",
         "https://i.imgur.com/B6HSkNo.png",
         "https://github.com/naseif"
       );
+      )
   },
 };
