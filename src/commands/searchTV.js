@@ -40,7 +40,9 @@ module.exports = {
           },
           {
             name: "Available at",
-            value: `${show.networks[0]?.name}`,
+            value: `${
+              show.networks[0]?.name ? show.networks[0].name : "No Info"
+            }`,
             inline: true,
           },
           {
@@ -84,8 +86,18 @@ module.exports = {
           `${show.genres.map((genre) => genre.name).join("-")}`,
           false
         )
-        .addField("Language", show.spoken_languages[0].english_name, true)
-        .addField("Tagline", show.tagline, true)
+        .addField(
+          "Language",
+          `${show.spoken_languages
+            .map((lang) => lang.english_name)
+            .join(", ")}`,
+          true
+        )
+        .addField(
+          "Tagline",
+          `${show?.tagline ? show.tagline : "Ups, no Tagline!"}`,
+          true
+        )
         .setImage(
           `https://www.themoviedb.org/t/p/w600_and_h900_bestv2${show.poster_path}`
         )

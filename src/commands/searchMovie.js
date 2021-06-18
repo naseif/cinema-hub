@@ -9,25 +9,24 @@ module.exports = {
       return message.channel.send(
         "Your RapidAPI key is not defined in config.json!"
       );
-
+    let moviePromise;
     let searchString = [];
+
     searchString[0] = "";
-    args.forEach((was) => {
-      if (Number(was)) {
-        searchString[1] = was;
+    args.forEach((arg) => {
+      if (Number(arg)) {
+        searchString[1] = arg;
       } else {
         if (searchString[0].length === 0) {
-          searchString[0] += was;
+          searchString[0] += arg;
         } else {
-          searchString[0] += " " + was;
+          searchString[0] += " " + arg;
         }
       }
     });
 
     if (!searchString[0])
       return message.channel.send("You have to provide a Movie name!");
-    console.log(searchString);
-    let moviePromise;
 
     if (searchString[1]) {
       moviePromise = getMovieID(searchString[0], searchString[1])
@@ -46,6 +45,7 @@ module.exports = {
           return movie;
         });
     }
+
     moviePromise.then((movie) => {
       const user = message.mentions.users.first() || message.author;
       const infoEmbed = new Discord.MessageEmbed()
@@ -79,7 +79,15 @@ module.exports = {
             inline: true,
           }
         )
-        .addField("Year", movie.release_date.slice(0, 4), true)
+        .addField(
+          "Year",
+          `${
+            movie?.release_date.slice(0, 4)
+              ? movie.release_date.slice(0, 4)
+              : "Not Released Yet"
+          }`,
+          true
+        )
         .addField(
           "Language",
           movie.spoken_languages.map((lang) => lang.english_name).join(", "),
