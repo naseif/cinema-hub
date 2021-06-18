@@ -19,7 +19,13 @@ module.exports = {
         .setTitle("Quote by Anime Name")
         .setDescription(quote.quote)
         .addField("Anime", quote.anime, true)
-        .addField("Character", quote.character, true);
+        .addField("Character", quote.character, true)
+        .setTimestamp()
+        .setFooter(
+          "Created by naseif",
+          "https://i.imgur.com/B6HSkNo.png",
+          "https://github.com/naseif"
+        );
       message.channel.send(quoteEmbed);
     });
   },

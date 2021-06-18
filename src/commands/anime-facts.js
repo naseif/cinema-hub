@@ -6,7 +6,6 @@ module.exports = {
   description: "Gets a random fact about anime!",
   execute(message, args) {
     getRandomFact().then((fact) => {
-      console.log(fact);
       if (!fact)
         return message.channel.send(
           "Sorry, there are no available facts at the moment!"
@@ -14,7 +13,13 @@ module.exports = {
       const factEmbed = new Discord.MessageEmbed()
         .setColor("#ffcc00")
         .setTitle("Facts about Anime")
-        .setDescription(fact.fact);
+        .setDescription(fact.fact)
+        .setTimestamp()
+        .setFooter(
+          "Created by naseif",
+          "https://i.imgur.com/B6HSkNo.png",
+          "https://github.com/naseif"
+        );
       message.channel.send(factEmbed);
     });
   },
