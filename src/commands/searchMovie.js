@@ -1,4 +1,6 @@
+const { getMovieID, getDetails } = require("../../api/getMovieBySearch-TMDb");
 const { TMDb } = require("../../config.json");
+
 module.exports = {
   name: "sm",
   description: "searches for movies from the imdb database ",
@@ -7,69 +9,96 @@ module.exports = {
       return message.channel.send(
         "Your RapidAPI key is not defined in config.json!"
       );
-    let infoObject = [];
-    const searchString = args.join(" ");
-    if (!searchString)
-      return message.channel.send("You have to provide a Movie name!");
-    const fullInfo = getIdAndGenInfo
-      .getFind(searchString)
-      .then((info) => {
-        infoObject.push(info);
-        const id = info.id.slice(7, -1);
-        return getPlotAndGenres.getGenresAndPlot(id);
-      })
-      .then((data) => {
-        infoObject.push({
-          plot: data.plot,
-          genres: data.genres,
-          rating: data.rating,
-        });
-        const id = infoObject[0].id.slice(7, -1);
-        return getSeason.getSeasons(id);
-      })
-      .then((seasons) => {
-        infoObject.push({ seasons: seasons.length });
-        return infoObject;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
 
-    fullInfo.then((data) => {
+    let searchString = [];
+    searchString[0] = "";
+    args.forEach((was) => {
+      if (Number(was)) {
+        searchString[1] = was;
+      } else {
+        if (searchString[0].length === 0) {
+          searchString[0] += was;
+        } else {
+          searchString[0] += " " + was;
+        }
+      }
+    });
+
+    if (!searchString[0])
+      return message.channel.send("You have to provide a Movie name!");
+    console.log(searchString);
+    let moviePromise;
+
+    if (searchString[1]) {
+      moviePromise = getMovieID(searchString[0], searchString[1])
+        .then((id) => {
+          return getDetails(id);
+        })
+        .then((movie) => {
+          return movie;
+        });
+    } else {
+      moviePromise = getMovieID(searchString[0])
+        .then((id) => {
+          return getDetails(id);
+        })
+        .then((movie) => {
+          return movie;
+        });
+    }
+    moviePromise.then((movie) => {
       const user = message.mentions.users.first() || message.author;
       const infoEmbed = new Discord.MessageEmbed()
         .setColor("#0099ff")
-        .setTitle(`${data[0].title} (${data[0].year})`)
-        .setURL(`https://www.imdb.com${data[0].id}`)
+        .setTitle(`${movie.title} (${movie.release_date.slice(0, 4)})`)
+        .setURL(`https://www.themoviedb.org/movie/${movie.id}`)
         .setAuthor(`${user.username}`)
-        .setDescription(data[1].plot)
-        // .setDescription(data[1].genres)
-        .setThumbnail("https://i.imgur.com/gfwmBoM.png")
+        .setDescription(movie.overview)
+        .setThumbnail(
+          `https://image.tmdb.org/t/p/h60${
+            movie.production_companies[0]?.logo_path
+              ? movie.production_companies[0].logo_path
+              : "https://i.imgur.com/0W3T391.png"
+          }`
+        )
         .addFields(
           {
             name: "Genres",
-            value: `${data[1].genres.join(" - ")}`,
+            value: `${movie.genres.map((genre) => genre.name).join("-")}`,
           },
           {
             name: "Rating",
-            value: `${data[1].rating ? data[1].rating : "Not aired yet!"}`,
+            value: `${
+              movie.vote_average ? movie.vote_average : "Not aired yet!"
+            }`,
             inline: true,
           },
           {
             name: "Runtime",
-            value: data[0].runtime,
+            value: movie.runtime,
             inline: true,
           }
         )
-        .addField("Year", data[0].year, true)
-        .setImage(data[0].imageUrl)
+        .addField("Year", movie.release_date.slice(0, 4), true)
+        .addField(
+          "Language",
+          movie.spoken_languages.map((lang) => lang.english_name).join(", "),
+          true
+        )
+        .addField(
+          "Tagline",
+          `${movie?.tagline ? movie.tagline : "Ups, no Tagline :("}`,
+          true
+        )
+        .setImage(
+          `https://www.themoviedb.org/t/p/w600_and_h900_bestv2${movie.poster_path}`
+        )
         .setTimestamp()
         .setFooter(
           "Created by naseif",
           "https://i.imgur.com/B6HSkNo.png",
           "https://github.com/naseif"
         );
-
       message.channel.send(infoEmbed);
     });
   },
