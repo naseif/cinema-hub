@@ -22,7 +22,7 @@ module.exports = {
         "Created by naseif",
         "https://i.imgur.com/B6HSkNo.png",
         "https://github.com/naseif"
-      );
       )
+     )
   },
 };
