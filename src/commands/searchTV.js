@@ -1,4 +1,5 @@
 const { TMDb } = require("../../config.json");
+const { getShowID, getDetails } = require("../../api/getShowBySearch-TMDb");
 
 module.exports = {
   name: "stv",
@@ -8,60 +9,92 @@ module.exports = {
       return message.channel.send(
         "Your TMDb key is not defined in config.json!"
       );
-
-    let infoObject = [];
     const searchString = args.join(" ");
     if (!searchString)
       return message.channel.send("You have to provide a Show name!");
 
-    fullInfo.then((data) => {
+    const fullShowDetails = getShowID(searchString)
+      .then((id) => {
+        return getDetails(id);
+      })
+      .then((details) => {
+        return details;
+      });
+
+    fullShowDetails.then((show) => {
       const user = message.mentions.users.first() || message.author;
       const infoEmbed = new Discord.MessageEmbed()
         .setColor("#0099ff")
-        .setTitle(`${data[0].title} (${data[0].year})`)
-        .setURL(`https://www.imdb.com${data[0].id}`)
+        .setTitle(`${show.name} (${show.first_air_date.slice(0, 4)})`)
+        .setURL(`https://www.themoviedb.org/tv/${show.id}`)
         .setAuthor(`${user.username}`)
-        .setDescription(data[1].plot)
+        .setDescription(show.overview)
         // .setDescription(data[1].genres)
-        .setThumbnail("https://i.imgur.com/gfwmBoM.png")
+        .setThumbnail(
+          `https://image.tmdb.org/t/p/h60${show.networks[0].logo_path}`
+        )
         .addFields(
           {
             name: "Seasons",
-            value: `${data[2].seasons ? data[2].seasons : "Movie"}`,
+            value: `${show.number_of_seasons}`,
+          },
+          {
+            name: "Available at",
+            value: `${show.networks[0]?.name}`,
+            inline: true,
+          },
+          {
+            name: "Status",
+            value: `${show.status}`,
+            inline: true,
           },
           {
             name: "Rating",
-            value: `${data[1].rating ? data[1].rating : "Not aired yet!"}`,
+            value: `${show.vote_average}`,
             inline: true,
           },
           {
-            name: "Series End Year",
-            value: `${
-              data[0].seriesEndYear ? data[0].seriesEndYear : "Unknown"
+            name: "Last Episode Air Date",
+            value: `${show.last_episode_to_air.air_date}`,
+            inline: true,
+          },
+          {
+            name: "Next Episode Number & Air Date",
+            value: `Episode ${
+              show.next_episode_to_air?.episode_number
+                ? show.next_episode_to_air.episode_number
+                : "Unknown"
+            } - ${
+              show.next_episode_to_air?.air_date
+                ? show.next_episode_to_air.air_date
+                : "Finished"
             }`,
-            inline: true,
-          },
-          {
-            name: "Type",
-            value: data[0].type,
-            inline: true,
+            inline: false,
           }
         )
         .addField(
           "Episodes Number",
-          `${data[0].episodesNumber ? data[0].episodesNumber : "Unknown"}`,
+          `${show.number_of_episodes ? show.number_of_episodes : "Unknown"}`,
           true
         )
-        .addField("Genres", data[1].genres.join(" - "), true)
+        .addField("Type", show.type, true)
 
-        .setImage(data[0].imageUrl)
+        .addField(
+          "Genres",
+          `${show.genres.map((genre) => genre.name).join("-")}`,
+          false
+        )
+        .addField("Language", show.spoken_languages[0].english_name, true)
+        .addField("Tagline", show.tagline, true)
+        .setImage(
+          `https://www.themoviedb.org/t/p/w600_and_h900_bestv2${show.poster_path}`
+        )
         .setTimestamp()
         .setFooter(
           "Created by naseif",
           "https://i.imgur.com/B6HSkNo.png",
           "https://github.com/naseif"
         );
-
       message.channel.send(infoEmbed);
     });
   },

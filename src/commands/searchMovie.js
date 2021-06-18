@@ -1,13 +1,9 @@
-const getIdAndGenInfo = require("../../api/getFind");
-const getPlotAndGenres = require("../../api/get-overview-details");
-const getSeason = require("../../api/get-seasons");
-const Discord = require("discord.js");
-const { rapidapikey } = require("../../config.json");
+const { TMDb } = require("../../config.json");
 module.exports = {
   name: "sm",
   description: "searches for movies from the imdb database ",
-  execute(message, args) {
-    if (!rapidapikey)
+  execute(message, args, clinet, Discord) {
+    if (!TMDb)
       return message.channel.send(
         "Your RapidAPI key is not defined in config.json!"
       );
