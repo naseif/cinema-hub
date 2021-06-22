@@ -1,10 +1,9 @@
-const Discord = require("discord.js");
 const { getQuoteByCharacterName } = require("../../api/get-anime-quotes");
 
 module.exports = {
   name: "quotechar",
   description: "Gets a random quote from the given character name",
-  execute(message, args) {
+  execute(message, args, client, Discord) {
     const searchString = args.join(" ");
     if (!searchString)
       return message.channel.send("You have to provide an anime name!");

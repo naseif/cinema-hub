@@ -1,10 +1,9 @@
-const Discord = require("discord.js");
 const getRandomFact = require("../../api/get-anime-fact");
 
 module.exports = {
   name: "animefact",
   description: "Gets a random fact about anime!",
-  execute(message, args) {
+  execute(message, args, client, Discord) {
     getRandomFact().then((fact) => {
       if (!fact)
         return message.channel.send(

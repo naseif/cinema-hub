@@ -1,10 +1,9 @@
-const Discord = require("discord.js");
 const getAnimedetails = require("../../api/get-anime-details");
 
 module.exports = {
   name: "san",
   description: "searches animes from myanimelist database ",
-  execute(message, args) {
+  execute(message, args, client, Discord) {
     const searchString = args.join(" ");
     if (!searchString)
       return message.channel.send("You have to provide an anime name!");

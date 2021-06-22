@@ -1,10 +1,9 @@
-const Discord = require("discord.js");
 const { getRandomQuotes } = require("../../api/get-anime-quotes");
 
 module.exports = {
   name: "quote",
   description: "Get a random anime quote!",
-  execute(message, args) {
+  execute(message, args, client, Discord) {
     getRandomQuotes().then((quote) => {
       const quoteEmbed = new Discord.MessageEmbed()
         .setColor("#ff751a")
