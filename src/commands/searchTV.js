@@ -111,7 +111,7 @@ module.exports = {
         message.channel.send(infoEmbed);
       })
       .catch((err) => {
-        message.channel.send("A TV Show with this name was not found!");
+        message.reply("A TV Show with this name was not found!");
       });
   },
 };

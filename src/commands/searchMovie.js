@@ -46,68 +46,74 @@ module.exports = {
         });
     }
 
-    moviePromise.then((movie) => {
-      const user = message.mentions.users.first() || message.author;
-      const infoEmbed = new Discord.MessageEmbed()
-        .setColor("#0099ff")
-        .setTitle(`${movie.title} (${movie.release_date.slice(0, 4)})`)
-        .setURL(`https://www.themoviedb.org/movie/${movie.id}`)
-        .setAuthor(`${user.username}`)
-        .setDescription(movie.overview)
-        .setThumbnail(
-          `https://image.tmdb.org/t/p/h60${
-            movie.production_companies[0]?.logo_path
-              ? movie.production_companies[0].logo_path
-              : "https://i.imgur.com/0W3T391.png"
-          }`
-        )
-        .addFields(
-          {
-            name: "Genres",
-            value: `${movie.genres.map((genre) => genre.name).join("-")}`,
-          },
-          {
-            name: "Rating",
-            value: `${
-              movie.vote_average ? movie.vote_average : "Not aired yet!"
+    moviePromise
+      .then((movie) => {
+        const user = message.mentions.users.first() || message.author;
+        const infoEmbed = new Discord.MessageEmbed()
+          .setColor("#0099ff")
+          .setTitle(`${movie.title} (${movie.release_date.slice(0, 4)})`)
+          .setURL(`https://www.themoviedb.org/movie/${movie.id}`)
+          .setAuthor(`${user.username}`)
+          .setDescription(movie.overview)
+          .setThumbnail(
+            `https://image.tmdb.org/t/p/h60${
+              movie.production_companies[0]?.logo_path
+                ? movie.production_companies[0].logo_path
+                : "https://i.imgur.com/0W3T391.png"
+            }`
+          )
+          .addFields(
+            {
+              name: "Genres",
+              value: `${movie.genres.map((genre) => genre.name).join("-")}`,
+            },
+            {
+              name: "Rating",
+              value: `${
+                movie.vote_average ? movie.vote_average : "Not aired yet!"
+              }`,
+              inline: true,
+            },
+            {
+              name: "Runtime",
+              value: movie.runtime,
+              inline: true,
+            }
+          )
+          .addField(
+            "Year",
+            `${
+              movie?.release_date.slice(0, 4)
+                ? movie.release_date.slice(0, 4)
+                : "Not Released Yet"
             }`,
-            inline: true,
-          },
-          {
-            name: "Runtime",
-            value: movie.runtime,
-            inline: true,
-          }
+            true
+          )
+          .addField(
+            "Language",
+            movie.spoken_languages.map((lang) => lang.english_name).join(", "),
+            true
+          )
+          .addField(
+            "Tagline",
+            `${movie?.tagline ? movie.tagline : "Ups, no Tagline :("}`,
+            true
+          )
+          .setImage(
+            `https://www.themoviedb.org/t/p/w600_and_h900_bestv2${movie.poster_path}`
+          )
+          .setTimestamp()
+          .setFooter(
+            "Created by naseif",
+            "https://i.imgur.com/B6HSkNo.png",
+            "https://github.com/naseif"
+          );
+        message.channel.send(infoEmbed);
+      })
+      .catch((err) =>
+        message.reply(
+          "A Movie with this Name was not found! Please make sure the Name is correct!"
         )
-        .addField(
-          "Year",
-          `${
-            movie?.release_date.slice(0, 4)
-              ? movie.release_date.slice(0, 4)
-              : "Not Released Yet"
-          }`,
-          true
-        )
-        .addField(
-          "Language",
-          movie.spoken_languages.map((lang) => lang.english_name).join(", "),
-          true
-        )
-        .addField(
-          "Tagline",
-          `${movie?.tagline ? movie.tagline : "Ups, no Tagline :("}`,
-          true
-        )
-        .setImage(
-          `https://www.themoviedb.org/t/p/w600_and_h900_bestv2${movie.poster_path}`
-        )
-        .setTimestamp()
-        .setFooter(
-          "Created by naseif",
-          "https://i.imgur.com/B6HSkNo.png",
-          "https://github.com/naseif"
-        );
-      message.channel.send(infoEmbed);
-    });
+      );
   },
 };
