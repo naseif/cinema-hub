@@ -10,9 +10,12 @@ module.exports = {
     let resultsArray = [];
     getAnimeByImage(args[0])
       .then((imageInfo) => {
-        imageInfo.docs.slice(0, firstPossibleAnimes).map((info, index) => {
+        if (imageInfo.error !== "") return message.reply(imageInfo.error);
+        imageInfo.result.slice(0, firstPossibleAnimes).map((info, index) => {
           resultsArray.push(
-            `${index + 1}: ${info.title_english} **AKA** ${info.title_romaji}`
+            `${index + 1}: ${info.anilist.title.english} **AKA** ${
+              info.anilist.title.romaji
+            } - **Similarity** ${info.similarity.toFixed(2) * 100}%`
           );
         });
 
@@ -23,10 +26,10 @@ module.exports = {
 
         message.channel.send(scannedImageResult);
       })
-      .catch((error) =>
+      .catch((error) => {
         message.reply(
           "Failed to proccess image! Please make sure the image URL is public! Otherwise the Anime does not exist in my database!"
-        )
-      );
+        );
+      });
   },
 };
