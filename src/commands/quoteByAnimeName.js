@@ -3,7 +3,7 @@ const { getByAnimeName } = require("../../api/get-anime-quotes");
 module.exports = {
   name: "quoteanime",
   description: "Gets a random quote from the given anime",
-  execute(message, args, dlient, Discord) {
+  execute(message, args, client, Discord) {
     const searchString = args.join(" ");
     if (!searchString)
       return message.channel.send("You have to provide an anime name!");
