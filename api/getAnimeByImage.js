@@ -10,7 +10,7 @@ async function getAnimeByImage(imageLink) {
     const handleResponse = await processImage.json();
     return handleResponse;
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 }
 

@@ -10,7 +10,7 @@ async function getRandomFact() {
     const getFact = await api.getFact(null);
     return getFact;
   } catch (err) {
-    console.log(err);
+    throw err;
   }
 }
 

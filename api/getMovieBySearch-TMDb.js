@@ -7,9 +7,12 @@ async function getMovieID(searchParam, year, message) {
       `https://api.themoviedb.org/3/search/movie?api_key=${TMDb}&language=en-US&query=${searchParam}&page=1&include_adult=false&year=${year}`
     );
     const convertResponeToJson = await apiCall.json();
+    if (!convertResponeToJson.total_results)
+      throw new Error(`${"Nothing found with this name!"}`);
+
     return convertResponeToJson.results[0].id;
-  } catch(err) {
-    console.error(err)
+  } catch (err) {
+    throw err;
   }
 }
 
@@ -21,7 +24,7 @@ async function getDetails(id, message) {
     const convertRes = await apiCall.json();
     return convertRes;
   } catch (err) {
-    console.error(err)
+    throw err;
   }
 }
 

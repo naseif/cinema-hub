@@ -5,13 +5,12 @@ async function getShowID(searchParam) {
   try {
     const apiCall = await fetch(
       `https://api.themoviedb.org/3/search/tv?api_key=${TMDb}&language=en-US&page=1&query=${searchParam}`
-    )
-    if(!apiCall) return;
+    );
+    if (!apiCall) return;
     const convertResponeToJson = await apiCall.json();
     return convertResponeToJson.results[0].id;
-  
   } catch (err) {
-    console.error(err)
+    throw err;
   }
 }
 
@@ -22,9 +21,8 @@ async function getDetails(id) {
     );
     const convertRes = await apiCall.json();
     return convertRes;
-  
   } catch (err) {
-    console.error(err)
+    throw err;
   }
 }
 

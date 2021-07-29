@@ -10,7 +10,7 @@ async function getRandomQuotes() {
     const quote = await requestQuote.json();
     return quote;
   } catch (err) {
-    console.log(err);
+    throw err;
   }
 }
 
@@ -24,7 +24,7 @@ async function getByAnimeName(animeName) {
 
     return quote[getRandomQuoteFromTheArray];
   } catch (err) {
-    console.log(err);
+    throw err;
   }
 }
 
@@ -38,7 +38,7 @@ async function getQuoteByCharacterName(characterName) {
 
     return quote[getRandomQuoteFromTheArray];
   } catch (err) {
-    console.log(err);
+    throw err;
   }
 }
 

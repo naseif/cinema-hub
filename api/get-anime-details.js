@@ -24,7 +24,7 @@ async function getAnimeInfo(animeName, type = "anime") {
       aired: getFullInfo.aired.string,
     };
   } catch (err) {
-    console.error(err);
+    throw err;
   }
 }
 
