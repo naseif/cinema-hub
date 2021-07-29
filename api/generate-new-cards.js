@@ -29,7 +29,20 @@ async function generateDeck(decksNumber) {
 
 async function replaceOldDeck(decksNumber) {
   try {
-    const newDeck = await generateDeck(decksNumber);
+    await generateDeck(decksNumber);
+  } catch (err) {
+    throw err;
+  }
+}
+
+async function drawCards(numberOfCardsToDraw) {
+  try {
+    const deckData = require("./deckData.json");
+    const drawCardFromTheDeck = await fetch(
+      `http://deckofcardsapi.com/api/deck/${deckData.deckID}/draw/?count=${numberOfCardsToDraw}`
+    );
+    const res = await drawCardFromTheDeck.json();
+    return res;
   } catch (err) {
     throw err;
   }
