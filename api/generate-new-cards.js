@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 const fs = require("fs");
 
-async function generateDeck(decksNumber) {
+async function generateDeck(decksNumber = "1") {
   try {
     const getNewDeck = await fetch(
       `http://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=${decksNumber}`
@@ -16,7 +16,7 @@ async function generateDeck(decksNumber) {
     }
     fs.writeFile(
       `${__dirname}/deckData.json`,
-      `{"deckID": "${res.deck_id}"}`,
+      `{"deckID": "${res.deck_id}", "remaining": "${res.remaining}"}`,
       "UTF-8",
       (err) => {
         if (err) throw new Error(`Could not write File!!`);
@@ -27,9 +27,12 @@ async function generateDeck(decksNumber) {
   }
 }
 
-async function replaceOldDeck(decksNumber) {
+async function reshuffleCards(decksNumber) {
   try {
-    await generateDeck(decksNumber);
+    const deckID = require("./deckData.json");
+    const reshuffleDeck = await fetch(
+      `http://deckofcardsapi.com/api/deck/${deckID.deckID}/shuffle/`
+    );
   } catch (err) {
     throw err;
   }
@@ -47,3 +50,9 @@ async function drawCards(numberOfCardsToDraw) {
     throw err;
   }
 }
+
+module.exports = {
+  generateDeck,
+  reshuffleCards,
+  drawCards,
+};
