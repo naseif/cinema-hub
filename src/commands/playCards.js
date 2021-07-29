@@ -8,6 +8,20 @@ module.exports = {
       return message.reply(
         "Please specify how many cards you wish to draw from the deck"
       );
-    console.log(await drawCards(args[0]));
+    try {
+      const cards = await drawCards(args[0]);
+      let newCards = [];
+      cards.cards.map((card) => {
+        newCards.push(
+          new Discord.MessageEmbed()
+            .setColor("#0099ff")
+            .setTitle("Your Draw")
+            .setImage(card.image)
+        );
+      });
+      message.channel.send(newCards);
+    } catch (err) {
+      message.channel.send(`💢 ${err.message} 💢`);
+    }
   },
 };
